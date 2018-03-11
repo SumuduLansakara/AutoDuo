@@ -18,9 +18,15 @@ def learn_word(gword, eword):
     _e2g[eword.lower()] = gword
 
 
-def to_english(gword):
-    return _g2e[gword.lower()]
+def _sanitize(key):
+    """ remove unwanted character in the key """
+    key = key.translate({ord(c): None for c in ',.'})
+    return ' '.join(key.split()).lower().replace(' ,', ',')
 
 
-def to_german(eword):
-    return _e2g[eword.lower()]
+def g2e(gword):
+    return _g2e[_sanitize(gword)]
+
+
+def e2g(eword):
+    return _e2g[_sanitize(eword)]
