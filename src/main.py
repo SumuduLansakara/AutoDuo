@@ -3,6 +3,7 @@
 import translator
 import user
 import webdriver
+from home_page import HomePage
 from login_page import LoginPage
 
 
@@ -21,6 +22,10 @@ def start():
     login.type_username(user.email)
     login.type_password(user.password)
     login.click_login()
+
+    # Home page: start Basics-1
+    home = HomePage(driver)
+    home.click_exercise("Basics-1")
 
     input("press any key to exit...")
     driver.quit()
