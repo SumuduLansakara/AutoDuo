@@ -27,6 +27,10 @@ def start():
     home = HomePage(driver)
     home.click_exercise("Basics-1")
 
+    # Exercise page: start lesson 1
+    exercise = ExercisePage(driver, "Basics-1")
+    exercise.click_lesson("1")
+
     input("press any key to exit...")
     driver.quit()
 
