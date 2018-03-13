@@ -1,1 +1,2 @@
-selenium==3.8.0
+psutil==5.4.3
+selenium==3.10.0
