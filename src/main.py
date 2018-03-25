@@ -1,10 +1,8 @@
 #!/usr/bin/env python3
 
-import time
-
 import brain
-import translator
 import settings
+import translator
 import webdriver
 from exercise_page import ExercisePage
 from home_page import HomePage
