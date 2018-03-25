@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+import sys
 
 import brain
 import settings
@@ -10,7 +11,7 @@ from lesson_page import LessonPage
 from login_page import LoginPage
 
 
-def start():
+def start(user, pwd):
     # load translator dictionaries
     translator.train()
 
@@ -22,8 +23,8 @@ def start():
     # Login page: login to account
     login = LoginPage(driver)
     login.click_signin()
-    login.type_username(settings.email)
-    login.type_password(settings.password)
+    login.type_username(user)
+    login.type_password(pwd)
     login.click_login()
 
     # Home page: start Basics-1
@@ -56,5 +57,22 @@ def start():
     driver.quit()
 
 
+def get_user_credentials():
+    index = 1
+    user = None
+    pwd = None
+    while index < len(sys.argv):
+        if sys.argv[index] == "-e":
+            user = sys.argv[index + 1]
+            index += 1
+        elif sys.argv[index] == "-p":
+            pwd = sys.argv[index + 1]
+            index += 1
+        index += 1
+    if user is None or pwd is None:
+        raise ValueError("Duolingo user credentials not provided!")
+    return user, pwd
+
+
 if __name__ == '__main__':
-    start()
+    start(*get_user_credentials())
