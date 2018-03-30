@@ -12,32 +12,11 @@ from selenium.webdriver.support.ui import WebDriverWait
 
 import settings
 
-_driver = None
-
 
 def _get_driver_path(driver_name):
     project_root_dir = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
     driver_dir = os.path.join(project_root_dir, "drivers")
     return os.path.join(driver_dir, driver_name)
-
-
-def driver():
-    return _driver
-
-
-def init_chrome_driver(headless=False):
-    global _driver
-    LOGGER.setLevel(logging.WARNING)
-    chrome_options = Options()
-    if headless:
-        chrome_options.add_argument("--headless")
-    warn_if_process_running(["chrome", "chromedriver"])
-    _driver = webdriver.Chrome(executable_path=_get_driver_path('chromedriver'),
-                               chrome_options=chrome_options)
-
-
-def close():
-    _driver.quit()
 
 
 def warn_if_process_running(processes):
@@ -47,49 +26,74 @@ def warn_if_process_running(processes):
             break
 
 
-def load_page(url):
-    logging.getLogger().info("loading web page: {}".format(url))
-    _driver.get(url)
+class WebDriver:
+    def __init__(self, url):
+        self._driver = None
+        self._url = url
 
+    def driver(self):
+        return self._driver
 
-def get_element(locator, element_id, timeout=settings.explicit_timeout):
-    return WebDriverWait(_driver, timeout).until(EC.visibility_of_element_located((locator, element_id)))
+    def init_chrome_driver(self, headless=False):
+        LOGGER.setLevel(logging.WARNING)
+        chrome_options = Options()
+        if headless:
+            chrome_options.add_argument("--headless")
+        warn_if_process_running(["chrome", "chromedriver"])
+        self._driver = webdriver.Chrome(executable_path=_get_driver_path('chromedriver'),
+                                        chrome_options=chrome_options)
 
+    def __enter__(self):
+        self.load_page(self._url)
+        return self._driver
 
-def get_elements(locator, element_id, timeout=settings.explicit_timeout):
-    return WebDriverWait(_driver, timeout).until(EC.visibility_of_all_elements_located((locator, element_id)))
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        self.close()
 
+    def close(self):
+        self._driver.quit()
 
-def get_clickable_element(locator, element_id, timeout=settings.explicit_timeout):
-    return WebDriverWait(_driver, timeout).until(EC.element_to_be_clickable((locator, element_id)))
+    def load_page(self, url):
+        logging.getLogger().info("loading web page: {}".format(url))
+        self._driver.get(url)
 
+    def get_element(self, locator, element_id, timeout=settings.explicit_timeout):
+        return WebDriverWait(self._driver, timeout).until(
+            EC.visibility_of_element_located((locator, element_id)))
 
-def _dispatch_key_event(name, options):
-    options["type"] = name
-    body = json.dumps({'cmd': 'Input.dispatchKeyEvent', 'params': options})
-    resource = "/session/%s/chromium/send_command" % _driver.session_id
-    url = _driver.command_executor._url + resource
-    _driver.command_executor._request('POST', url, body)
+    def get_elements(self, locator, element_id, timeout=settings.explicit_timeout):
+        return WebDriverWait(self._driver, timeout).until(
+            EC.visibility_of_all_elements_located((locator, element_id)))
 
+    def get_clickable_element(self, locator, element_id, timeout=settings.explicit_timeout):
+        return WebDriverWait(self._driver, timeout).until(
+            EC.element_to_be_clickable((locator, element_id)))
 
-def hold_space(duration):
-    endtime = time.time() + duration
-    options = {
-        "code": "KeyW",
-        "key": " ",
-        "text": " ",
-        "unmodifiedText": " ",
-        "nativeVirtualKeyCode": ord(" "),
-        "windowsVirtualKeyCode": ord(" ")
-    }
+    def _dispatch_key_event(self, name, options):
+        options["type"] = name
+        body = json.dumps({'cmd': 'Input.dispatchKeyEvent', 'params': options})
+        resource = "/session/%s/chromium/send_command" % self._driver.session_id
+        url = self._driver.command_executor._url + resource
+        self._driver.command_executor._request('POST', url, body)
 
-    while True:
-        _dispatch_key_event("rawKeyDown", options)
-        _dispatch_key_event("char", options)
+    def hold_space(self, duration):
+        end_time = time.time() + duration
+        options = {
+            "code": "KeyW",
+            "key": " ",
+            "text": " ",
+            "unmodifiedText": " ",
+            "nativeVirtualKeyCode": ord(" "),
+            "windowsVirtualKeyCode": ord(" ")
+        }
 
-        if time.time() > endtime:
-            _dispatch_key_event("keyUp", options)
-            break
+        while True:
+            self._dispatch_key_event("rawKeyDown", options)
+            self._dispatch_key_event("char", options)
 
-        options["autoRepeat"] = True
-        time.sleep(0.001)
+            if time.time() > end_time:
+                self._dispatch_key_event("keyUp", options)
+                break
+
+            options["autoRepeat"] = True
+            time.sleep(0.001)

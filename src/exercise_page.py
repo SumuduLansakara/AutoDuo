@@ -1,8 +1,12 @@
 from selenium.webdriver.common.by import By
 
-import webdriver
-
+_webdriver = None
 _href_prefix = None
+
+
+def init_page(webdriver):
+    global _webdriver
+    _webdriver = webdriver
 
 
 def init_exercise(exercise_name):
@@ -15,4 +19,4 @@ def _get_lesson_css(lesson_name):
 
 
 def click_lesson(lesson_name):
-    webdriver.get_element(By.CSS_SELECTOR, _get_lesson_css(lesson_name)).click()
+    _webdriver.get_element(By.CSS_SELECTOR, _get_lesson_css(lesson_name)).click()

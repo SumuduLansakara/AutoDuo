@@ -11,7 +11,7 @@ import logger
 import login_page
 import player
 import translator
-import webdriver
+from webdriver import WebDriver
 
 
 def start(user, pwd, repetitions):
@@ -19,40 +19,44 @@ def start(user, pwd, repetitions):
     translator.train()
 
     # setup web driver
+    webdriver = WebDriver(r'https://www.duolingo.com/')
     webdriver.init_chrome_driver()
-    webdriver.load_page(r'https://www.duolingo.com/')
 
-    # Login Page: login to account
-    logging.getLogger().info("logging in")
-    login_page.click_signin()
-    login_page.type_username(user)
-    login_page.type_password(pwd)
-    login_page.click_login()
+    with webdriver:
+        # Login Page: login to account
+        logging.getLogger().info("logging in")
+        login_page.init_page(webdriver)
+        login_page.click_signin()
+        login_page.type_username(user)
+        login_page.type_password(pwd)
+        login_page.click_login()
 
-    # Home page: start Basics-1
-    logging.getLogger().info("selecting exercise")
-    home_page.click_exercise("Basics-1")
+        # Home page: start Basics-1
+        logging.getLogger().info("selecting exercise")
+        home_page.init_page(webdriver)
+        home_page.click_exercise("Basics-1")
 
-    # Exercise page: start lesson 1
-    exercise_page.init_exercise("Basics-1")
-    for l in range(1, repetitions + 1):
-        logging.getLogger().info("starting lesson {}/{}".format(l, repetitions))
-        exercise_page.click_lesson("1")
+        # Exercise page: start lesson 1
+        exercise_page.init_page(webdriver)
+        exercise_page.init_exercise("Basics-1")
 
-        challenges = player.do_all_challenges()
-        logging.getLogger().debug("{} challenges completed".format(challenges))
+        lesson_page.init_page(webdriver)
+        for l in range(1, repetitions + 1):
+            logging.getLogger().info("starting lesson {}/{}".format(l, repetitions))
+            exercise_page.click_lesson("1")
 
-        # exercise complete
-        # TODO: handle exercise completion
-        while True:
-            try:
-                lesson_page.click_next(5)
-            except exceptions.TimeoutException:
-                break
-        logging.getLogger().info("lesson completed")
+            challenges = player.do_all_challenges()
+            logging.getLogger().debug("{} challenges completed".format(challenges))
 
-    logging.getLogger().info("{} repetitions completed".format(repetitions))
-    webdriver.close()
+            # exercise complete
+            while True:
+                try:
+                    lesson_page.click_next(5)
+                except exceptions.TimeoutException:
+                    break
+            logging.getLogger().info("lesson completed")
+
+        logging.getLogger().info("{} repetitions completed".format(repetitions))
 
 
 def get_user_credentials():

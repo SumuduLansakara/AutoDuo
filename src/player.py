@@ -5,9 +5,8 @@ from enum import Enum
 from selenium.common import exceptions
 
 import lesson_page
+import settings
 import translator
-
-MAX_LOAD_ATTEMPTS = 10
 
 
 def do_all_challenges():
@@ -18,29 +17,30 @@ def do_all_challenges():
         try:
             challenge_header = lesson_page.get_challenge_header().strip()
             challenge_load_attempts = 0
-            while challenge_load_attempts < MAX_LOAD_ATTEMPTS:
+            while challenge_load_attempts < settings.max_challenge_load_attempts:
                 challenge_load_attempts += 1
                 if challenge_header:
                     if challenge_header != prev_header:
                         break
                     type_, _ = _decide_type_and_data(challenge_header)
                     if type_ == ChallengeType.write_in_english:
-                        hint = lesson_page.get_hint_sentence(challenge_load_attempts / 2)
+                        hint = lesson_page.get_hint_sentence(challenge_load_attempts)
                         hint = translator.sanitize(hint)
                         if hint != prev_data:
                             break
                 challenge_header = lesson_page.get_challenge_header().strip()
             else:
-                logging.getLogger().debug("challenge completed [Max attempts reached]")
+                logging.getLogger().debug(
+                    "challenge completed: Max attempts ({}) reached".format(settings.max_challenge_load_attempts))
                 return cid
         except exceptions.StaleElementReferenceException:
-            logging.getLogger().debug("challenge completed [StaleElementReferenceException]")
+            logging.getLogger().debug("challenge completed: StaleElementReferenceException")
             return cid
         except exceptions.TimeoutException:
-            logging.getLogger().debug("challenge completed [TimeoutException]")
+            logging.getLogger().debug("challenge completed: TimeoutException")
             return cid
         except Exception:
-            logging.getLogger().debug("challenge completed [Unknown]")
+            logging.getLogger().debug("challenge completed: Unknown")
             return cid
         cid += 1
         type_, data = _decide_type_and_data(challenge_header)
@@ -59,7 +59,6 @@ def do_all_challenges():
                 lesson_page.select_radio(translator.e2g(data))
         lesson_page.click_next()
         lesson_page.click_next()
-        lesson_page.wait_till_header_changed(challenge_header, 1)
         prev_header = challenge_header
 
 

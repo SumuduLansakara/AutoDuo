@@ -1,19 +1,24 @@
 from selenium.webdriver.common.by import By
 
-import webdriver
+_webdriver = None
+
+
+def init_page(webdriver):
+    global _webdriver
+    _webdriver = webdriver
 
 
 def click_signin():
-    webdriver.get_element(By.ID, 'sign-in-btn').click()
+    _webdriver.get_element(By.ID, 'sign-in-btn').click()
 
 
 def click_login():
-    webdriver.get_element(By.ID, 'login-button').click()
+    _webdriver.get_element(By.ID, 'login-button').click()
 
 
 def type_username(username):
-    webdriver.get_element(By.ID, 'top_login').send_keys(username)
+    _webdriver.get_element(By.ID, 'top_login').send_keys(username)
 
 
 def type_password(password):
-    webdriver.get_element(By.ID, 'top_password').send_keys(password)
+    _webdriver.get_element(By.ID, 'top_password').send_keys(password)
