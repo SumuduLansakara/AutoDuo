@@ -31,16 +31,16 @@ def do_all_challenges():
                             break
                 challenge_header = lesson_page.get_challenge_header().strip()
             else:
-                logging.getLogger().debug("challenge completed: max attempts reached")
+                logging.getLogger().debug("challenge completed [Max attempts reached]")
                 return cid
         except exceptions.StaleElementReferenceException:
-            logging.getLogger().debug("challenge completed: StaleElementReferenceException")
+            logging.getLogger().debug("challenge completed [StaleElementReferenceException]")
             return cid
         except exceptions.TimeoutException:
-            logging.getLogger().debug("challenge completed: TimeoutException")
+            logging.getLogger().debug("challenge completed [TimeoutException]")
             return cid
         except Exception:
-            logging.getLogger().debug("challenge completed: Generic")
+            logging.getLogger().debug("challenge completed [Unknown]")
             return cid
         cid += 1
         type_, data = _decide_type_and_data(challenge_header)

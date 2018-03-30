@@ -10,8 +10,8 @@ def _get_element_css(element, text):
     return "{}[data-test='{}']".format(element, text)
 
 
-def click_next():
-    webdriver.get_clickable_element(By.CSS_SELECTOR, _get_element_css('button', 'player-next')).click()
+def click_next(timeout=settings.explicit_timeout):
+    webdriver.get_clickable_element(By.CSS_SELECTOR, _get_element_css('button', 'player-next'), timeout).click()
 
 
 def click_skip():

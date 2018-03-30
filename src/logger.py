@@ -1,4 +1,5 @@
 import logging
+import time
 
 
 def init_logging(enable_console_log, enable_file_log):
@@ -10,6 +11,7 @@ def init_logging(enable_console_log, enable_file_log):
 
     if enable_file_log:
         logger.addHandler(_get_file_handler('autoduo.log'))
+    logger.debug("Starting AutoDuo: {}".format(time.strftime("%Y-%m-%d [%H:%M:%S]")))
 
 
 def _get_stream_handler():
