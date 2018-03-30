@@ -14,7 +14,7 @@ AutoDuo currently supports following web-drivers.
  - [Chrome-driver](https://sites.google.com/a/chromium.org/chromedriver/downloads)
  - [Firefox-driver (geckodriver)](https://github.com/mozilla/geckodriver/releases)
 
-Simply, download required web driver(s) and put them inside `drivers` directory.
+Download required web driver(s) and put them inside `drivers` directory.
 
 Final project hierarchy should look as follows.
  - AutoDuo

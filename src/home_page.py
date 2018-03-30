@@ -1,10 +1,11 @@
-class HomePage:
-    def __init__(self, driver):
-        self._driver = driver
-        self._href_prefix = "/skill/de"
+from selenium.webdriver.common.by import By
 
-    def _get_exercise_css(self, exercise_name):
-        return "a[href='{}/{}']".format(self._href_prefix, exercise_name)
+import webdriver
 
-    def click_exercise(self, exercise_name):
-        self._driver.find_element_by_css_selector(self._get_exercise_css(exercise_name)).click()
+
+def _get_exercise_css(exercise_name):
+    return "a[href='/skill/de/{}']".format(exercise_name)
+
+
+def click_exercise(exercise_name):
+    webdriver.get_element(By.CSS_SELECTOR, _get_exercise_css(exercise_name)).click()

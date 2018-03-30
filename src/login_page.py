@@ -1,19 +1,19 @@
-class LoginPage:
-    def __init__(self, driver):
-        self._driver = driver
-        self._css_signin_btn = 'sign-in-btn'
-        self._css_user_field = 'top_login'
-        self._css_pass_field = 'top_password'
-        self._css_login_btn = 'login-button'
+from selenium.webdriver.common.by import By
 
-    def click_signin(self):
-        self._driver.find_element_by_id(self._css_signin_btn).click()
+import webdriver
 
-    def click_login(self):
-        self._driver.find_element_by_id(self._css_login_btn).click()
 
-    def type_username(self, username):
-        self._driver.find_element_by_id(self._css_user_field).send_keys(username)
+def click_signin():
+    webdriver.get_element(By.ID, 'sign-in-btn').click()
 
-    def type_password(self, password):
-        self._driver.find_element_by_id(self._css_pass_field).send_keys(password)
+
+def click_login():
+    webdriver.get_element(By.ID, 'login-button').click()
+
+
+def type_username(username):
+    webdriver.get_element(By.ID, 'top_login').send_keys(username)
+
+
+def type_password(password):
+    webdriver.get_element(By.ID, 'top_password').send_keys(password)

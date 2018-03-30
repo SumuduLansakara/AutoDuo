@@ -1,1 +1,1 @@
-implicit_timeout = 10
+explicit_timeout = 10
