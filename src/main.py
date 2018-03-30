@@ -1,9 +1,11 @@
 #!/usr/bin/env python3
+import logging
 import sys
 
 import exercise_page
 import home_page
 import lesson_page
+import logger
 import login_page
 import player
 import translator
@@ -11,6 +13,8 @@ import webdriver
 
 
 def start(user, pwd):
+    logger.init_logging(True, False)
+
     # load translator dictionaries
     translator.train()
 
@@ -32,7 +36,7 @@ def start(user, pwd):
     exercise_page.click_lesson("1")
 
     challenges = player.do_all_challenges()
-    print("{} challenges completed".format(challenges))
+    logging.getLogger().info("{} challenges completed".format(challenges))
 
     # exercise complete
     # TODO: handle exercise completion

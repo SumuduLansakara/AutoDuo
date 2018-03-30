@@ -1,3 +1,4 @@
+import logging
 import re
 from enum import Enum
 
@@ -30,27 +31,27 @@ def do_all_challenges():
                             break
                 challenge_header = lesson_page.get_challenge_header().strip()
             else:
-                print("### max attempts reached")
+                logging.getLogger().debug("challenge completed: max attempts reached")
                 return cid
         except exceptions.StaleElementReferenceException:
-            print("### StaleElementReferenceException")
+            logging.getLogger().debug("challenge completed: StaleElementReferenceException")
             return cid
         except exceptions.TimeoutException:
-            print("### TimeoutException")
+            logging.getLogger().debug("challenge completed: TimeoutException")
             return cid
         except Exception:
-            print("### Generic")
+            logging.getLogger().debug("challenge completed: Generic")
             return cid
         cid += 1
         type_, data = _decide_type_and_data(challenge_header)
         if type_ == ChallengeType.write_in_english:
             hint = lesson_page.get_hint_sentence()
             hint = translator.sanitize(hint)
-            print("challenge {}: {} [{}]".format(cid, challenge_header, hint))
+            logging.getLogger().info("challenge {}: {} [{}]".format(cid, challenge_header, hint))
             prev_data = hint
             lesson_page.type_english(translator.g2e(hint))
         else:
-            print("challenge {}: {}".format(cid, challenge_header))
+            logging.getLogger().info("challenge {}: {}".format(cid, challenge_header))
             prev_data = data
             if type_ == ChallengeType.write_in_german:
                 lesson_page.type_german(translator.e2g(data))

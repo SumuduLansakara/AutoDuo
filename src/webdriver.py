@@ -1,10 +1,12 @@
 import json
+import logging
 import os
 import time
 
 import psutil
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.remote.remote_connection import LOGGER
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
 
@@ -25,6 +27,7 @@ def driver():
 
 def init_chrome_driver(headless=False):
     global _driver
+    LOGGER.setLevel(logging.WARNING)
     chrome_options = Options()
     if headless:
         chrome_options.add_argument("--headless")
@@ -45,6 +48,7 @@ def warn_if_process_running(processes):
 
 
 def load_page(url):
+    logging.getLogger().info("loading web page: {}".format(url))
     _driver.get(url)
 
 
