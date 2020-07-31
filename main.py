@@ -1,6 +1,6 @@
 import logging
 import os
-import time
+from typing import Tuple
 
 from selenium import webdriver
 from selenium.webdriver.chrome.webdriver import WebDriver
@@ -14,13 +14,15 @@ userdata_path = f"{state_dir}/userdata"
 url = 'https://www.duolingo.com/'
 
 
-def get_driver() -> WebDriver:
+def get_driver() -> Tuple[WebDriver, bool]:
+    """ returns web-driver and a bool which is False if this is the first run """
     options = webdriver.ChromeOptions()
     options.add_argument(f"user-data-dir={userdata_path}")
     options.headless = False
+    is_userdata_found = os.path.isdir(userdata_path)
     driver = webdriver.Chrome(executable_path="drivers/chromedriver", options=options)
-    driver.implicitly_wait(5)
-    return driver
+    driver.implicitly_wait(5)  # TODO: use explicit waits
+    return driver, is_userdata_found
 
 
 def init_logging():
@@ -31,19 +33,15 @@ def init_logging():
 
 def start():
     init_logging()
-    driver = get_driver()
+    driver, is_userdata_found = get_driver()
     driver.get(url)
-
     root = driver.find_element(By.ID, 'root')
 
-    try:
-        # TODO: need a proper test
-        logging.debug("check if logged in using cache")
+    if not is_userdata_found:
+        logging.debug("Fresh run")
         _ = root.find_element(By.XPATH, "//a[@data-test='get-started-top']")
-        logging.info("You must manually log-in in the first run. You have 60 seconds !")
-        time.sleep(60)
-    except:
-        pass
+        logging.info("You must manually log-in in the first run. You have 60 seconds (rerun if timed-out) !")
+        input("press <Enter> after logging in.. ")
 
     basics = root.find_element(By.XPATH, "//div[contains(text(), 'Basics 1')]")
     parent = basics.find_element(By.XPATH, '..')
