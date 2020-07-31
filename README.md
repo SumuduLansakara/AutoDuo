@@ -8,38 +8,37 @@ This currently does only the `basic-1` lesson of Duolingo `German` (in English) 
 
 ### Downloading web-drivers
 
-Selenium web-driver files are not provided with the source package (as they are continuously being updated by the respective browser developers). Required web-drivers need to be added manually to make the program work.
+Selenium web-driver files are not provided with the source package (as they are continuously being updated by the respective browser developers).
+Required web-drivers need to be added manually to make the program work.
 
 AutoDuo currently supports following web-drivers.
  - [Chrome-driver](https://sites.google.com/a/chromium.org/chromedriver/downloads)
- - [Firefox-driver (geckodriver)](https://github.com/mozilla/geckodriver/releases)
 
 Download required web driver(s) and put them inside `drivers` directory.
 
-Final project hierarchy should look as follows.
+> Optionally, you can use the provided downloader script in `tools` directory.
+> This downloads the latest chrome-driver.
+> However, if you are using an old chrome browser, you might need to manually download a compatible chrome-driver.
+
+Final project hierarchy should be as follows.
  - AutoDuo
 	 + drivers
 		 + [web driver file(s)]
 	 + src
 		 + [python source files]
-	 + venv [optional python virtual environment]
-	 - requirements.txt
 	 - README.md
 	 - LICENSE
 
 ## Installing required python modules
 
-> It is recommended to use a python virtual-environment for installing
-> required python modules without installing them system-wide
-
-Required python modules are listed in `requirements.txt`. 
+> It is recommended to use `pipenv` for installing required python modules.
 
 Invoke following command from inside the project root directory to install all the requirements.
 
-    pip install -r requirements.txt
+    pipenv install
 
 ## Usage
 AutoDuo main script must be invoked with providing a valid Duolingo user-email and password as command-line arguments.
 
-    python main.py -e <user_email> -p <password>
+    python3 main.py
 
