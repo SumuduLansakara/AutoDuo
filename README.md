@@ -1,38 +1,46 @@
+[![License](https://img.shields.io/github/license/SumuduLansakara/AutoDuo)](https://github.com/SumuduLansakara/AutoDuo/blob/master/LICENSE)
+[![Python version](https://img.shields.io/github/pipenv/locked/python-version/sumudulansakara/AutoDuo)](https://www.python.org/)
+[![Selenium version](https://img.shields.io/github/pipenv/locked/dependency-version/SumuduLansakara/AutoDuo/selenium)](https://www.selenium.dev/)
+[![Stars](https://img.shields.io/github/stars/SumuduLansakara/AutoDuo?style=social)](https://github.com/SumuduLansakara/AutoDuo/stargazers)
+
 # AutoDuo
 
-A program that automatically does Duolingo exercises. 
-
-This currently does only the `basic-1` lesson of Duolingo `German` (in English) course.
+An attempt to automatically perform [Duolingo](https://www.duolingo.com/) exercises via browser automation.
 
 ## Setting up
 
-### Downloading web-drivers
+### Requirements
+- python 3.7
+- selenium web-drivers
 
-Selenium web-driver files are not provided with the source package (as they are continuously being updated by the respective browser developers).
-Required web-drivers need to be added manually to make the program work.
+### Downloading Web-drivers
+
+Selenium web-drivers need to be downloaded manually.
+They are not provided with the source package as they are continuously being updated by the respective browser developers.
 
 AutoDuo currently supports following web-drivers.
  - [Chrome-driver](https://sites.google.com/a/chromium.org/chromedriver/downloads)
 
 Download required web driver(s) and put them inside `drivers` directory.
 
-> Optionally, you can use the provided downloader script in `tools` directory.
-> This downloads the latest chrome-driver.
-> However, if you are using an old chrome browser, you might need to manually download a compatible chrome-driver.
+> Provided downloader script in `tools` directory downloads the latest chrome-driver.
+> However, if you are using an old chrome browser, you might have to manually download a compatible chrome-driver.
 
 Final project hierarchy should be as follows.
- - AutoDuo
-	 + drivers
-		 + [web driver file(s)]
-	 + tools
-		 + ...
-	 - README.md
-	 - LICENSE
-	 - ...
+```
+AutoDuo (repository root directory)
+├── drivers
+│   └── chromedriver
+├── tools
+│   └── ...
+├── LICENSE
+├── README.md
+└── ...
+```
 
-## Installing required python modules
+## Installing Required Python Modules
 
-> It is recommended to use `pipenv` for installing required python modules.
+> It is recommended to use [`pipenv`](https://pypi.org/project/pipenv/) for installing required python modules.
 
 Invoke following command from inside the project root directory to install all the requirements.
 
@@ -43,3 +51,15 @@ AutoDuo main script must be invoked with providing a valid Duolingo user-email a
 
     pipenv run python3 main.py
 
+In the very first run, you have to manually log into your Duolingo account.
+This is not necessary in subsequent runs.
+
+## ToDo
+
+- Add support to play more levels (currently plays only the first level)
+- Improve translations
+- Support different web drivers
+
+## Known Bugs and Workarounds
+
+- The program can crash before starting a lesson. Ignore this and re-run.
