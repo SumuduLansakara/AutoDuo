@@ -41,5 +41,5 @@ Invoke following command from inside the project root directory to install all t
 ## Usage
 AutoDuo main script must be invoked with providing a valid Duolingo user-email and password as command-line arguments.
 
-    python3 main.py
+    pipenv run python3 main.py
 
