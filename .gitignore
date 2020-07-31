@@ -1,5 +1,5 @@
-*.pyc
-venv
-drivers
-*.log
-.idea
+__pycache__/*
+.idea/*
+
+drivers/*
+state/*
