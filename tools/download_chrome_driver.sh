@@ -1,5 +1,14 @@
 #!/usr/bin/env bash
 
+if !type curl &>/dev/null; then
+    echo "curl is not installed"
+    exit 1
+fi
+if !type unzip &>/dev/null; then
+    echo "unzip is not installed"
+    exit 1
+fi
+
 # get latest driver version
 version_url="https://chromedriver.storage.googleapis.com/LATEST_RELEASE"
 driver_version="$(curl -s "$version_url")"
