@@ -1,5 +1,6 @@
 import logging
 import os
+import time
 
 from selenium import webdriver
 from selenium.webdriver.chrome.webdriver import WebDriver
@@ -33,7 +34,30 @@ def start():
 
     root = driver.find_element(By.ID, 'root')
 
-    # TODO: automate user interaction
+    try:
+        # TODO: need a proper test
+        logging.debug("check if logged in using cache")
+        _ = root.find_element(By.XPATH, "//a[@data-test='get-started-top']")
+        logging.info("You must manually log-in in the first run. You have 60 seconds !")
+        time.sleep(60)
+    except:
+        pass
+
+    basics = root.find_element(By.XPATH, "//div[contains(text(), 'Basics 1')]")
+    parent = basics.find_element(By.XPATH, '..')
+    logging.debug("click lesson logo")
+    parent.click()
+
+    level_box = root.find_element(By.XPATH, "//div[contains(text(), 'Level')]")
+    btn = level_box.find_element(By.XPATH, "//button[@data-test='start-button']")
+    logging.debug("click lesson start button")  # FIXME: sometimes this fails
+    btn.click()
+
+    start_span = driver.find_element(By.XPATH, "//span[contains(text(), 'Start timed practice')]")
+    logging.debug("click start practice button")
+    start_span.find_element(By.XPATH, '..').click()
+
+    # TODO: start practice
 
 
 if __name__ == '__main__':
