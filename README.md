@@ -24,10 +24,11 @@ Final project hierarchy should be as follows.
  - AutoDuo
 	 + drivers
 		 + [web driver file(s)]
-	 + src
-		 + [python source files]
+	 + tools
+		 + ...
 	 - README.md
 	 - LICENSE
+	 - ...
 
 ## Installing required python modules
 

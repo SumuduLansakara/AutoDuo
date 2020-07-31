@@ -17,7 +17,7 @@ echo "Latest chrome web-driver version: [$driver_version]"
 # go to driver directory
 driver_dir="$(dirname "$0")/../drivers"
 mkdir -p "${driver_dir}"
-cd "${driver_dir}"
+cd "${driver_dir}" || exit
 
 # download web driver
 driver_url="https://chromedriver.storage.googleapis.com/${driver_version}/chromedriver_linux64.zip"

@@ -40,7 +40,7 @@ def start():
     if not is_userdata_found:
         logging.debug("Fresh run")
         _ = root.find_element(By.XPATH, "//a[@data-test='get-started-top']")
-        logging.info("You must manually log-in in the first run. You have 60 seconds (rerun if timed-out) !")
+        logging.info("You must manually log-in in the first run.")
         input("press <Enter> after logging in.. ")
 
     basics = root.find_element(By.XPATH, "//div[contains(text(), 'Basics 1')]")
