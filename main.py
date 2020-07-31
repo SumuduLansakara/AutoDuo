@@ -7,6 +7,8 @@ from selenium.webdriver.chrome.webdriver import WebDriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.remote.remote_connection import LOGGER
 
+from timed_practice import TimedPractice
+
 state_dir = f"{os.getcwd()}/state"
 userdata_path = f"{state_dir}/userdata"
 url = 'https://www.duolingo.com/'
@@ -57,7 +59,8 @@ def start():
     logging.debug("click start practice button")
     start_span.find_element(By.XPATH, '..').click()
 
-    # TODO: start practice
+    practice = TimedPractice(driver)
+    practice.start()
 
 
 if __name__ == '__main__':
